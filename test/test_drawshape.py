@@ -67,21 +67,21 @@ class TestDrawShape(unittest.TestCase):
     # def test_efficiency(self):
     #     # 16x faster cropping, then RMS compared to comparing 1600x1200 image
     #     tries = 200 
-    #     print "*"*10
-    #     print "RMS diff sans crop"
+    #     print ("*"*10)
+    #     print ("RMS diff sans crop")
     #     start_time = timeit.default_timer()
     #     for i in range(tries):
     #         DrawShape.rmsdiff(self.ds.image, self.ds.og_image)
-    #     print(timeit.default_timer() - start_time)
+    #     print ( ( timeit.default_timer() - start_time) )
 
-    #     print "*"*10
-    #     print "RMS diff crop"
+    #     print ("*"*10)
+    #     print ("RMS diff crop")
     #     start_time = timeit.default_timer()
     #     for i in range(tries):
     #         rect_coords = (0,0,100,100)
     #         art_img, og_img = self.ds.crop_b4_compare(rect_coords)
     #         DrawShape.rmsdiff(art_img, og_img)
-    #     print(timeit.default_timer() - start_time)
+    #     print ( (timeit.default_timer() - start_time) )
 
     def test_draw_shape(self):
         pass

@@ -3,7 +3,7 @@
 from PIL import Image, ImageDraw
 import random
 import util
-from cell import Cell
+from shapes.cell import Cell
 
 
 """
@@ -59,7 +59,7 @@ class RectCell(Cell):
         # pw = 4 #(self.width/len(self.colors))/3
         shortest = n_width if n_width < n_height else n_height
         pw = int(round(.5 * shortest * 1/(len(self.colors) + len(self.colors_secondary))))
-        # print pw
+        # print (pw)
         # import pdb; pdb.set_trace()
         """
         draw border square

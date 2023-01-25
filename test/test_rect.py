@@ -14,7 +14,7 @@ class TestRect(unittest.TestCase):
 
     def test_init_random(self):
         rect = Rect.init_random(bound_size=(self.w, self.h))
-        print rect
+        print (rect)
         pass
 
     def test_init_coords(self):

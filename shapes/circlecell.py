@@ -1,7 +1,7 @@
 
 
 from PIL import Image, ImageDraw
-from cell import Cell
+from shapes.cell import Cell
 import random
 import util
 
@@ -32,7 +32,7 @@ class CircleCell(Cell):
         # XXX:  May need to double check these on smaller images:
         step = int((dynamic-dynamic/2)/(4.0))
         step = 1 if not step else step
-        for d in range(dynamic/2, dynamic, step):
+        for d in range(dynamic//2, dynamic, step):
             # d = dynamic
             for color_combo in color_combos:
                 if height > width:

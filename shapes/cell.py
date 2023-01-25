@@ -23,7 +23,7 @@ class Cell(object):
     __metaclass__ = abc.ABCMeta
 
     def __init__(self):
-        print "I am init"
+        print ("I am init")
 
 
 

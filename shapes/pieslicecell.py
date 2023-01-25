@@ -3,7 +3,7 @@
 
 from PIL import Image, ImageDraw
 import util
-from cell import Cell, Quadrant
+from shapes.cell import Cell, Quadrant
 
 class PieSliceCell(Cell):
     def __init__(self, size=(200,200), base_colors=[], second_colors=[], 

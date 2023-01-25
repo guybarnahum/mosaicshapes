@@ -27,7 +27,7 @@ def create_reg_images(photo_path, pix_multi, diamond, color,
         is_continue = False if e_index >= grid.rows else True
         if not is_continue:
             break
-
+        
     # double check that we are not doing double work
     try:
         pool = ThreadPool(8)

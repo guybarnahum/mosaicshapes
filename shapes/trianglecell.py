@@ -4,7 +4,7 @@ from PIL import Image, ImageDraw, ImageOps
 import numpy as np
 from colorpalette import ColorPalette
 import util
-from cell import Cell, Quadrant
+from shapes.cell import Cell, Quadrant
 
 """
 
@@ -75,10 +75,10 @@ class TriangleCell(Cell):
         pw = int(round(.5 * .5 * shortest * 1/(len(self.colors) + len(self.colors_secondary))))
         pw = util.clamp_int(pw, 1, 10000)
         # pw = 6
-        # print pw
+        # print (pw)
         # import pdb; pdb.set_trace()
         # pw = 1
-        # print pw
+        # print (pw)
         # import pdb; pdb.set_trace()
         paper = Image.new('RGBA', (n_width, n_height))
         canvas = ImageDraw.Draw(paper, paper.mode)

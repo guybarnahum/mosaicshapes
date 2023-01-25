@@ -93,14 +93,14 @@ class Grid():
         else:
             self.pixels = int(longest*.013)
 
-        self.cols = (self.width/self.pixels)
-        self.rows = (self.height/self.pixels)
+        self.cols = (self.width//self.pixels)
+        self.rows = (self.height//self.pixels)
 
         # Crop the image if our pixels doesn't divide equally.  Most cases we always crop
         # will prevent out of bounds processing on cells
         # XXX Does this work for diamonds too?
         self.og_image = self.og_image.crop((0, 0, self.cols*self.pixels, self.rows*self.pixels))
-        self.grid_status = np.zeros([self.width/self.pixels, self.height/self.pixels])
+        self.grid_status = np.zeros([self.width//self.pixels, self.height//self.pixels])
 
     # By default we occupy one cell at a time.  x_total is number of additional horizontal
     # cells to occupy.  Vertical is number of additional vertical cells
@@ -175,12 +175,14 @@ class Grid():
     def n_pass(self, n_total=-1):
         self.grid_start_end(0, self.rows)
 
-    def grid_start_end_thread(self, (s_row, f_row, out_path)):
+    def grid_start_end_thread(self, todo ):
+        s_row, f_row, out_path = todo
         self.grid_start_end(s_row, f_row)
         self.save(out_path)
-        # print "{s},{e}".format(s=s_row, e=f_row)
+        
 
     def grid_start_end(self, s_row, f_row):
+
         width, height = self.og_image.size
         pix = self.pixels
 
@@ -250,7 +252,7 @@ class Grid():
                         img = ccolor.draw(self.N)
 
                     self.canvas_img.paste(img, (int(x*self.N), int(y*self.N)))
-                    self.occupy(col, row, pix_w/pix, pix_h/pix)
+                    self.occupy(col, row, pix_w//pix, pix_h//pix)
 
     def crop_grid(self, img, N=2):
         return img.crop((0, 0, self.cols*self.pixels*N, self.rows*self.pixels*N))

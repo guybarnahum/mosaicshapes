@@ -40,7 +40,7 @@ class TestPieSliceCell(unittest.TestCase):
         # # test upper left ear
         # crop_left_ear = og_image.crop((50-25,200-25, 50+25, 200+25))
         # # trect = PieSliceCell.find_best(crop_left_ear, n=2, sn=3)
-        # # print trect.quadrant
+        # # print (trect.quadrant)
         # # import pdb; pdb.set_trace()
         # # self.assertTrue(trect.quadrant == Quadrant.bottom_right or trect.quadrant == Quadrant.top_left)
 
