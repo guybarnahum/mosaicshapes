@@ -70,10 +70,3 @@ docker rm $(docker ps -aq)
 docker image rm <image-id>
 docker image prune
 ```
-
-
-
-{
-   "3cb1f9055d3b4e6a87d04196213b7035": "{\n    \"aborted\": false,\n    \"args\": {\n        \"temp\": \"/tmp/tmpz0uj5dt7.jpg\",\n        \"uid\": \"3cb1f9055d3b4e6a87d04196213b7035\",\n        \"url\": \"aHR0cHM6Ly9tLm1lZGlhLWFtYXpvbi5jb20vaW1hZ2VzL1AvMTkwOTI2Mzc4OC4wMS5fU0NMWlpaWlpaWl9TWDUwMF8uanBn\"\n    },\n    \"delta_ms\": 1676330674595,\n    \"expired\": false,\n    \"finish_ms\": 1676330674594,\n    \"fn\": {},\n    \"name\": \"createMosaic\",\n    \"output\": \"/tmp/out-3cb1f9055d3b4e6a87d04196213b7035.jpg\",\n    \"result\": 0,\n    \"start_ms\": -1,\n    \"temp\": \"/tmp/tmpz0uj5dt7.jpg\",\n    \"uid\": \"3cb1f9055d3b4e6a87d04196213b7035\"\n}",
-   "6028d78ea4104c9b992afcf0ce1b8945": "{\n    \"aborted\": false,\n    \"args\": {\n        \"temp\": \"/tmp/tmpy3yl6y7v.jpg\",\n        \"uid\": \"6028d78ea4104c9b992afcf0ce1b8945\",\n        \"url\": \"aHR0cHM6Ly9tLm1lZGlhLWFtYXpvbi5jb20vaW1hZ2VzL1AvMTkwOTI2Mzc4OC4wMS5fU0NMWlpaWlpaWl9TWDUwMF8uanBn\"\n    },\n    \"delta_ms\": -1,\n    \"expired\": false,\n    \"finish_ms\": -1,\n    \"fn\": {},\n    \"name\": \"createMosaic\",\n    \"output\": null,\n    \"result\": null,\n    \"start_ms\": -1,\n    \"temp\": \"/tmp/tmpy3yl6y7v.jpg\",\n    \"uid\": \"6028d78ea4104c9b992afcf0ce1b8945\"\n}"
-}
