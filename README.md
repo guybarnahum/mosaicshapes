@@ -1,8 +1,10 @@
 # Mosaic Shapes
 
-<img src="./app/examples/mosaic1.jpeg" height=390> 
-<img src="./app/examples/mosaic2.jpeg" height=390> 
-<img src="./app/examples/mosaic3.jpeg" height=390>
+<p align="center">
+  <img src="./app/examples/mosaic1.jpeg" width="30%"> 
+  <img src="./app/examples/mosaic2.jpeg" width="30%"> 
+  <img src="./app/examples/mosaic3.jpeg" width="30%"> 
+</p>
 
 
 ```console
