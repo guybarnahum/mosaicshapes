@@ -1,5 +1,4 @@
 
-
 from PIL import Image, ImageFilter
 from shapes.comp import CompColor
 from shapes.trianglecell import TriangleCell
@@ -7,9 +6,8 @@ from shapes.circlecell import CircleCell
 from shapes.rectcell import RectCell
 from shapes.pieslicecell import PieSliceCell
 from shapes.halfcirclecell import HalfCircleCell
-from skimage.color import rgb2grey
+from skimage.color import rgb2gray
 from skimage import feature
-import util
 import numpy as np
 from numpy.random import randint
 from colorpalette import ColorPalette
@@ -17,9 +15,14 @@ import random
 import imghdr
 from gencolor import GenColor
 import math
+import logging
+import util
 
-"""
+# get root logger
+logger = logging.getLogger(__name__) # the __name__ resolve to "grid" since we are at the root of the project. 
+                                     # This will get the root logger since no logger in the configuration has this name.
 
+'''
 - diamond grid instead of square grid
 - multi-color cells
 - pieslice bottom needs to be moved up a little
@@ -29,19 +32,29 @@ x - circle stretching needs to be fixed on 2x1 cells
 x Need to supersample drawing triangles ... needs anti alias
 x triangle drawing on 2x2 bleeds over
 x - 2x1 rectcell is not centered
-"""
-
+'''
 
 class Grid():
-    def __init__(self, imgpath, pix=0, pix_multi=-1, diamond=True, 
+    def __init__(self, url, imgpath, pix=0, pix_multi=-1, diamond=True, 
                  colorful=True, unsharp_radius=2, working_res=0, enlarge=0):
 
         self.N = 2
         self.is_diamond = diamond
         self.is_colorful = int(colorful)
 
+        logger.debug(f'download_url url:{url} >> local path:{imgpath}')
+
+        try:
+            imgpath = util.download_url(url, imgpath)
+            data = Image.open(imgpath)
+        except Exception as e:
+            logger.error(str(e))
+            data = None
+            # @todo : handle errors somehow...
+
         self.imgpath = imgpath
-        self.og_image = util.image_transpose_exif(Image.open(imgpath))
+
+        self.og_image = util.image_transpose_exif(data)
         self.width, self.height = self.og_image.size
 
         if enlarge > 0:
@@ -80,7 +93,7 @@ class Grid():
         self.edg_img = self.og_image.filter(ImageFilter.UnsharpMask(2, percent=300))
         self.image_array = np.array(self.edg_img)
         # Find edges
-        self.img_edges = feature.canny(rgb2grey(self.image_array), sigma=2)
+        self.img_edges = feature.canny(rgb2gray(self.image_array), sigma=2)
         self.width, self.height = self.og_image.size
 
 
@@ -107,7 +120,7 @@ class Grid():
     def occupy(self, x, y, x_total=1, y_total=1):
         for i in range(x_total):
             for j in range(y_total):
-                if x+i < self.width/self.pixels and y+j < self.height/self.pixels:
+                if x+i < self.width//self.pixels and y+j < self.height//self.pixels:
                     self.grid_status[x+i][y+j] = 1
 
     # Test vertical expansion
