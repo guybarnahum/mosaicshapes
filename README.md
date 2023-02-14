@@ -1,7 +1,7 @@
 # Mosaic Shapes
 
-<img src="https://github.com/guybarnahum/mosaicshapes/blob/master/app/examples/mosaic1.jpeg" height=390> 
-<img src="https://github.com/guybarnahum/mosaicshapes/blob/master/app/examples/mosaic2.jpeg" height=390> 
+<img src="./app/examples/mosaic1.jpeg" height=390> 
+<img src="./app/examples/mosaic2.jpeg" height=390> 
 <img src="./app/examples/mosaic3.jpeg" height=390>
 
 
