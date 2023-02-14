@@ -6,17 +6,16 @@
 
 
 ```console
-$ python run.py ./input/bryan.jpg -e 2000 -d -c 1; open /tmp/out.jpg
+$ python run.py file://path/to/input.jpg -e 2000 -d -c 1; open /tmp/out.jpg
 
-$ python run.py -h
-usage: run.py [-h] [-d] [-c {0,1,2}] [-a] [-r WORKING_RES] [-e ENLARGE]
-              [-m MULTI] [-p POOL] [-o OUT]
-              N [N ...]
+$ python run.py --help
+usage: run.py [-h] [-d] [-c {0,1,2}] [-a] [-r WORKING_RES] [-e ENLARGE] [-m MULTI] [-p POOL] [-o OUT] [-b] [-D] N [N ...]
 
 Mosaic photos
 
 positional arguments:
-  N                     Photo path
+  N                     Url photos
+
 optional arguments:
   -h, --help            show this help message and exit
   -d, --diamond         Use diamond grid instead of squares
@@ -29,7 +28,9 @@ optional arguments:
                         Resolution to draw
   -m MULTI, --multi MULTI
   -p POOL, --pool POOL
-  -o OUT, --out OUT
+  -o OUT, --out OUT     output file - default is /tmp/out.jpg
+  -b, --base64url       urls are in base64url ecoding
+  -D, --download-only   download image from url to local path
 ```
 
 ## FastApi

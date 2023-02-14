@@ -90,7 +90,7 @@ def main():
     parser = argparse.ArgumentParser(description='Mosaic photos')
 
     parser.add_argument('urls', metavar='N', type=str, nargs='+',
-                        help='Url photos base64 url encoded')
+                        help='Url photos')
     parser.add_argument("-d", "--diamond", default=False, action='store_true',
                         help="Use diamond grid instead of squares")
     parser.add_argument("-c", "--color", default=False,
@@ -104,9 +104,10 @@ def main():
                         help="Resolution to draw")
     parser.add_argument("-m", "--multi", default=.014, type=float)
     parser.add_argument("-p", "--pool", default=1, type=int)
-    parser.add_argument("-o", "--out", default="/tmp/out.jpg", type=str)
+    parser.add_argument("-o", "--out", default="/tmp/out.jpg", type=str, 
+                        help="output file - default is /tmp/out.jpg")
     parser.add_argument('-b', "--base64url", default=False, action='store_true',
-                        help="convert urls to base64url ecoding")
+                        help="urls are in base64url ecoding")
     parser.add_argument('-D', "--download-only", default=False, action='store_true',
                         help="download image from url to local path")
 
