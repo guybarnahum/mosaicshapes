@@ -1,10 +1,11 @@
 # Mosaic Shapes
 
 <p align="center">
-  <img src="./app/examples/mosaic1.jpeg" width="30%"> 
-  <img src="./app/examples/mosaic2.jpeg" width="30%"> 
-  <img src="./app/examples/mosaic3.jpeg" width="30%"> 
+  <img src="./examples/mosaic2.jpeg" width="30%"> 
+  <img src="./examples/mosaic3.jpeg" width="30%"> 
+  <img src="./examples/mosaic4.jpeg" width="30%"> 
 </p>
+
 
 
 ```console

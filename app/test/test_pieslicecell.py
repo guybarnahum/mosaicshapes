@@ -1,12 +1,16 @@
 
-
 import unittest
+
+import os, sys
+parent = os.path.abspath('.')
+sys.path.insert(1, parent)
+
 from PIL import Image
 import util
 import numpy as np
 from skimage import io, feature
-from pieslicecell import PieSliceCell
-from cell import Quadrant
+from shapes.pieslicecell import PieSliceCell
+from shapes.cell import Quadrant
 from colorpalette import ColorPalette
 
 class TestPieSliceCell(unittest.TestCase):
