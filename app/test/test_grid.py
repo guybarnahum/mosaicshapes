@@ -1,8 +1,12 @@
 
 
 import unittest
-from grid import Grid
 
+import os, sys
+parent = os.path.abspath('.')
+sys.path.insert(1, parent)
+
+from grid import Grid
 from gencolor import ColorType
 import profile
 import cProfile
@@ -11,7 +15,7 @@ import cProfile
 
 class TestGrid(unittest.TestCase):
     def setUp(self):
-        self.grid = Grid("/Users/dean/Desktop/og/bo.jpg", pix_multi=.014, diamond=True, colorful=ColorType.kANALOGOUS, 
+        self.grid = Grid(None,"../input/bryan.jpg", pix_multi=.014, diamond=True, colorful=ColorType.kANALOGOUS, 
             working_res=1600, enlarge=1600)
        
     def tearDown(self):
@@ -20,8 +24,8 @@ class TestGrid(unittest.TestCase):
     def test_n_pass(self):
         n=1
         self.grid.n_pass(n)
-        self.grid.save("./out.JPEG")
-
+        self.grid.save("/tmp/out.jpg")
+        print('saved grid into out.jpg')
     # def test_occupy(self):
     #     x,y = (10,10)
     #     self.grid.occupy(x,y)

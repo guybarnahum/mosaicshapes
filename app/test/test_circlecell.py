@@ -23,7 +23,7 @@ class TestCircleCell(unittest.TestCase):
         pass
 
     def test_find_best(self):
-        og_image = Image.open("./input/bryan.jpg")
+        og_image = Image.open("../input/bryan.jpg")
 
         # Test lower left jaw
         cropped = og_image.crop((125,370,150,395))
@@ -46,17 +46,13 @@ class TestCircleCell(unittest.TestCase):
 
     def test_draw(self):
         # colors = CircleCell.gen_colors(base_color, n=4)
-        ccell = CircleCell(size=(24,12), csize=(24,12), base_colors=[(100,100,100)], 
-            second_colors=[(200,200,200)], n=3, sn=2, colorful=False)
+        ccell = CircleCell(size=(24,12), csize=(24,12), base_colors=[(100,100,100)], second_colors=[(200,200,200)])
         ccell.draw().show()
-        ccell = CircleCell(size=(200,200), csize=(200,200), base_colors=[(100,100,100)], 
-            second_colors=[(200,200,200)], n=3, sn=2)
+        ccell = CircleCell(size=(200,200), csize=(200,200), base_colors=[(100,100,100)], second_colors=[(200,200,200)])
         ccell.draw()
-        ccell = CircleCell(size=(200,200), csize=(200,200), base_colors=[(100,100,100)], 
-            second_colors=[(200,200,200)], n=3, sn=2)
+        ccell = CircleCell(size=(200,200), csize=(200,200), base_colors=[(100,100,100)], second_colors=[(200,200,200)])
         ccell.draw()
-        ccell = CircleCell(size=(200,200), csize=(200,200), base_colors=[(100,100,100)], 
-            second_colors=[(200,200,200)], n=3, sn=2)
+        ccell = CircleCell(size=(200,200), csize=(200,200), base_colors=[(100,100,100)], second_colors=[(200,200,200)])
         ccell.draw()
 
 

@@ -1,10 +1,12 @@
 
 
-
+from skimage import io
 import numpy as np
 # import matplotlib.pyplot as plt
 # from skimage import io, feature
 from time import time
+from sklearn.utils import shuffle
+from sklearn.cluster import KMeans
 
 
 RANDOM_SAMPLE = 100
@@ -74,7 +76,7 @@ class ColorPalette():
 
         # xxx:  use percentage of total pixs instead?
         image_array_sample = shuffle(image_array, random_state=0)[:RANDOM_SAMPLE] 
-        kmeans = KMeans(n_clusters=n_colors, random_state=0).fit(image_array_sample)
+        kmeans = KMeans(n_clusters=n_colors, random_state=0,n_init="auto").fit(image_array_sample)
         colorbook = kmeans.cluster_centers_
         return colorbook
 
@@ -88,7 +90,7 @@ class ColorPalette():
 
         # xxx:  use percentage of total pixs instead?
         image_array_sample = shuffle(image_array, random_state=0)[:RANDOM_SAMPLE] 
-        kmeans = KMeans(n_clusters=n_colors, random_state=0).fit(image_array_sample)
+        kmeans = KMeans(n_clusters=n_colors, random_state=0,n_init="auto").fit(image_array_sample)
         colorbook = kmeans.cluster_centers_
 
         labels = kmeans.predict(image_array)
@@ -110,7 +112,7 @@ class ColorPalette():
 
         # xxx:  use percentage of total pixs instead?
         image_array_sample = shuffle(image_array, random_state=0)[:RANDOM_SAMPLE] 
-        self.kmeans = KMeans(n_clusters=n_colors, random_state=0).fit(image_array_sample)
+        self.kmeans = KMeans(n_clusters=n_colors, random_state=0,n_init="auto").fit(image_array_sample)
         self.colorbook = self.kmeans.cluster_centers_
 
         # Get labels for all points in the image

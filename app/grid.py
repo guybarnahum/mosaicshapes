@@ -45,7 +45,8 @@ class Grid():
         logger.debug(f'download_url url:{url} >> local path:{imgpath}')
 
         try:
-            imgpath = util.download_url(url, imgpath)
+            if url : # pass empty url to process local image path
+                imgpath = util.download_url(url, imgpath)
             data = Image.open(imgpath)
         except Exception as e:
             logger.error(str(e))

@@ -1,5 +1,10 @@
 
 import unittest
+
+import os, sys
+parent = os.path.abspath('.')
+sys.path.insert(1, parent)
+
 from colorpalette import ColorPalette
 from sklearn.datasets import load_sample_image
 from skimage import io
@@ -8,7 +13,7 @@ class TestColorPalette(unittest.TestCase):
 
     def setUp(self):
         self.pal = ColorPalette()
-        self.pal.quantize("./examples/bill.JPEG", 64)
+        self.pal.quantize("./input/bryan.jpg", 64)
         pass
        
     def tearDown(self):
@@ -20,9 +25,9 @@ class TestColorPalette(unittest.TestCase):
 
     def test_apply_palette_to_image(self):
     	# china = load_sample_image("china.jpg")
-    	self.pal.quantize("./examples/bill.JPEG", 12)
+    	self.pal.quantize("./input/bryan.jpg", 12)
     	# self.pal.apply_palette_to_image(china)
-    	self.pal.apply_palette_to_image(io.imread("./examples/bill.JPEG"))
+    	self.pal.apply_palette_to_image(io.imread("./input/bryan.jpg"))
 
     # def test_quantize(self):
 
