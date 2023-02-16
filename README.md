@@ -1,7 +1,7 @@
 # Mosaic Shapes
 
 <p align="center">
-  <img src="./examples/mosaic2.jpg" width="30%"> 
+  <img src="./examples/mosaic1.jpg" width="30%"> 
   <img src="./examples/mosaic3.jpg" width="30%"> 
   <img src="./examples/mosaic4.jpg" width="30%"> 
 </p>
