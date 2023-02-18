@@ -35,18 +35,14 @@ x - 2x1 rectcell is not centered
 '''
 
 class Grid():
-    def __init__(self, url, imgpath, pix=0, pix_multi=-1, diamond=True, 
+    def __init__(self, imgpath, pix=0, pix_multi=-1, diamond=True, 
                  colorful=True, unsharp_radius=2, working_res=0, enlarge=0):
 
         self.N = 2
         self.is_diamond = diamond
         self.is_colorful = int(colorful)
 
-        logger.debug(f'download_url url:{url} >> local path:{imgpath}')
-
         try:
-            if url : # pass empty url to process local image path
-                imgpath = util.download_url(url, imgpath)
             data = Image.open(imgpath)
         except Exception as e:
             logger.error(str(e))

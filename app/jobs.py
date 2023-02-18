@@ -6,11 +6,10 @@ from concurrent.futures.process import ProcessPoolExecutor
 # misc 
 import logging
 import traceback
-import tempfile
 import json
 
 # app
-from util import now_ms,since_ms
+from util import now_ms,since_ms, get_temp_file
 from typing import Dict
 from uuid import uuid4
 
@@ -31,7 +30,7 @@ def json_job_serializer(obj):
 
 '''
 '''
-class Job: # (BaseModel):
+class Job:
 
     def __init__(self):
         self.uid = uuid4().hex
@@ -66,8 +65,8 @@ class JobCreateMosaic(Job):
         self.name = 'createMosaic'
         self.fn = JobCreateMosaic_fn
 
-        _,self.temp = tempfile.mkstemp(suffix = '.jpg') 
-        self.args['temp'] = self.temp
+        self.temp = get_temp_file()
+        self.args['local_path'] = self.temp
 
     def delete(self):
         print(f'Job({name}) delete temp {self.temp}')

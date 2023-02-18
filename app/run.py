@@ -8,21 +8,40 @@ import logging
 
 logger = logging.getLogger(__name__)  # the __name__ resolve to "run"
                                       # This will load the root logger
+def run(ops):
 
-def run(url_b64, photo_path, pix_multi, diamond, color,
-                      working_res, enlarge, pool, output_path):
+    url         = ops['url']
+    local_path  = ops['local_path' ]
+    output_path = ops['output_path']
+    multi       = ops['multi']
+    diamond     = ops['diamond']
+    color       = ops['color']
+    working_res = ops['working_res']
+    enlarge     = ops['enlarge']
+    pool        = ops['pool']
 
-    url = b642str(url_b64)
-    #print(f'photo_path:{photo_path}')
-    #print(f'pix_multi:{pix_multi}')
-    #print(f'diamond:{diamond}')
-    #print(f'color:{color}')
-    #print(f'working_res:{working_res}')
-    #print(f'enlarge:{enlarge}')
-    #print(f'pool:{pool}')
-    #print(f'output_path:{output_path}')
+    print(f'local_path:{local_path}')
+    print(f'output_path:{output_path}')
+    print(f'pix_multi:{multi}')
+    print(f'diamond:{diamond}')
+    print(f'color:{color}')
+    print(f'working_res:{working_res}')
+    print(f'enlarge:{enlarge}')
+    print(f'pool:{pool}')
+  
+    try:
+        if url : # pass empty url to process local image path
+            local_path = download_url(url, local_path)
+    except Exception as e:
+        logger.error(str(e))
+        # @todo : handle errors somehow...
+        local_path = None
 
-    grid = Grid(url, photo_path, pix=0, pix_multi=pix_multi, diamond=diamond,
+    if local_path is None:
+        logger.error(f'Could not download image from {url}' )
+        return -1, None
+
+    grid = Grid(local_path, pix=0, pix_multi=multi, diamond=diamond,
                 colorful=color, working_res=working_res, enlarge=enlarge)
 
     total_updates = 20
@@ -50,6 +69,8 @@ def run(url_b64, photo_path, pix_multi, diamond, color,
     except (KeyboardInterrupt, SystemExit):
         pool.terminate()
 
+    ext = get_ext(local_path, with_dot=True)
+    output_path = output_path + ext 
     grid.save(output_path)
 
     return 0, output_path
@@ -67,23 +88,22 @@ def run(url_b64, photo_path, pix_multi, diamond, color,
     #     print 100
 
 
-def run_defaults( args ):
+def run_defaults( ops ):
     
-    print_dict(args)
+    print_dict(ops)
+    uid = ops['uid']
+    
+    ops['output_path'] = '/tmp/out-' + str(uid) 
+    ops['multi'  ] = 0.014
+    ops['diamond'] = True
+    ops['color'  ] = 1
+    ops['working_res'] = 0
+    ops['enlarge'] = 2000
+    ops['pool']    = 1
 
-    uid       = args['uid']
-    url_b64   = args['url']
-    photo_path=args['temp']
+    print(f'ops={ops}')
+    rc, output_path = run(ops)
 
-    multi=0.014
-    diamond=True
-    color=1
-    working_res=0
-    enlarge=2000
-    pool=1
-    output_path='/tmp/out-' + str(uid) + '.jpg'
-
-    rc, output_path = run(url_b64, photo_path, multi, diamond, color, working_res, enlarge, pool, output_path)
     return rc, output_path
 
 def main():
@@ -119,15 +139,26 @@ def main():
 
     print(f'url: {url}')
     print(f'url_base64: {url_b64}')
-
-    photo_path = '/tmp/555.jpg' 
+    local_path = get_temp_file() 
     
     if args.download_only:
-        photo_path=download_url(url, photo_path)
+        local_path=download_url(url, local_path)
         return 0
 
-    run(url_b64, photo_path, args.multi, args.diamond, args.color,
-        args.working_res, args.enlarge, args.pool, args.out)
+    ops = {
+        'url' : url,
+        'local_path': local_path,
+        'output_path': args.out,
+        'multi'     : args.multi,
+        'diamond'   : args.diamond,
+        'color'     : args.color,
+        'working_res': args.working_res,
+        'enlarge'   : args.enlarge,
+        'pool'      : args.pool
+    }
+
+    run( ops )
+
     return 0
 
 

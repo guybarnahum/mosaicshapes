@@ -11,15 +11,49 @@ import numpy as np
 from itertools import chain
 import time
 import base64
+import tempfile
+import hashlib
+import os
+import imghdr
 import logging
 
 logger = logging.getLogger(__name__)  # the __name__ resolve to "util"
                                       # This will load the root logger
 
-def download_url(url, local_path, ua=True):
-    print(f'download_url url:{url} >> local path:{local_path}')    
-    logger.debug(f'urlretrieve url:{url} >> local path:{local_path}')
+def get_ext(path,with_dot=False):
+    basename = os.path.basename(path)  # os independent
+    ext = '.'.join(basename.split('.')[1:])   # <-- main part
     
+    if ext is not None:
+        ext = ext.lower()
+        if with_dot:
+            ext = '.' + ext
+    return ext
+
+def hash_str(s,len=12):
+    digest = hashlib.sha256(bytes(s)).hexdigest(len//2)
+    return digest
+
+def get_temp_file(name=None,suffix=None):
+    #_,tf = tempfile.mkstemp(suffix) 
+    if  suffix is None:
+        suffix = ''
+
+    if  name is None:
+        name = os.urandom(8).hex() + suffix
+    
+    tf = os.path.join(tempfile.gettempdir(), name)
+    return tf
+
+def download_url(url, local_path, ua=True):
+
+    print(f'download_url url:{url} >> local path:{local_path}')    
+
+    if os.path.exists(local_path):
+        logger.debug(f'local path exists ... using cached value') 
+        os.utime(local_path, None)
+        return local_path
+
     try:
         if not ua or ua is False:
             logger.debug(f'User-Agent as urllib')
@@ -37,6 +71,7 @@ def download_url(url, local_path, ua=True):
 
             request_=urllib.request.Request(url,None,headers) #The assembled request
             response = urllib.request.urlopen(request_)# store the response
+
             #create a new file and write the image
             f = open(local_path,'wb')
             f.write(response.read())
@@ -44,7 +79,20 @@ def download_url(url, local_path, ua=True):
     
     except Exception as e:
         logger.error(str(e))
-        local_path = None
+
+    if local_path is not None:
+        
+        ext = imghdr.what(local_path)
+        if  ext == 'jpeg': 
+            ext = 'jpg'
+
+        logger.debug(f'download_url: ext is {ext}')
+        
+        if ext:
+            local_path_ext = local_path + '.' + ext
+            os.rename( local_path, local_path_ext)
+            local_path = local_path_ext
+        logger.debug(f'urlretrieve url:{url} >> local path:{local_path}')
     
     return local_path
 

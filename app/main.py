@@ -35,13 +35,13 @@ jobs = Jobs()
 
 '''
 '''
-#@app.middleware('http')
-#async def catch_exceptions_middleware(request: Request, call_next):
-#    try:
-#        return await call_next(request)
-#    except Exception as e:
-#        logger.error(str(e))
-#        return Response("Internal server error", status_code=500)
+@app.middleware('http')
+async def catch_exceptions_middleware(request: Request, call_next):
+    try:
+        return await call_next(request)
+    except Exception as e:
+        logger.error(str(e))
+        return Response("Internal server error", status_code=500)
 
 @app.middleware('http')
 async def log_requests(request: Request, call_next):
@@ -67,7 +67,7 @@ async def alive():
 @app.get("/exec/{url}", status_code=HTTPStatus.ACCEPTED)
 async def task_handler(url: str, background_tasks: BackgroundTasks):
     job = JobCreateMosaic()
-    job.args['url'] = url
+    job.args['url'] = b642str(url)
     background_tasks.add_task(jobs.start_job, job )
     return job
 
@@ -81,8 +81,6 @@ async def job_status_handler(uid: str):
 
 @app.get("/job-list/")
 async def job_list_handler():
-    #all = jobs.all()
-    #js = json.dumps(all, indent=4, default=json_job_serializer)
     js = jobs.toJSON()
     print(js)
     return Response(js, status_code=200)
