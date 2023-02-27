@@ -1,10 +1,8 @@
 
-
 from PIL import Image, ImageDraw
 from shapes.cell import Cell
 import random
 import util
-
 
 class CircleCell(Cell):
     def __init__(self, size=(200, 200), csize=(200, 200),

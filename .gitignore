@@ -1,4 +1,7 @@
 *.pyc
 .DS_Store
-test.cfg
 app/.DS_Store
+boto.cfg
+test.cfg
+tmp/*
+/public

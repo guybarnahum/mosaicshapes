@@ -2,7 +2,6 @@
 import colorsys
 import math
 import operator
-#from urllib.request import urlretrieve
 import urllib.request
 from PIL import Image, ImageChops
 import functools
@@ -19,6 +18,58 @@ import logging
 
 logger = logging.getLogger(__name__)  # the __name__ resolve to "util"
                                       # This will load the root logger
+
+def convert_url(url,filter=None):
+    schema = str_schema(url, filter=filter)
+    if not schema:
+        try:
+            url = b642str(url)
+        except Exception as e:
+            url = None
+            logger.error(str(e))
+        schema = str_schema(url, filter=filter)
+
+    url = url if schema else None
+    logger.info(f'convert_url return {url}')
+    return url
+
+def str_schema(s, filter=None):
+    schema_del = '://'
+    schema,_ = s.split(schema_del,1) if schema_del in s else (None, None)
+    if filter:
+        if schema not in filter:
+            logger.warn(f'unsupported schema {schema} in {s}')
+            schema = None # ignore unsupported schema 
+    
+    logger.info(f'found schema {schema} in {s}')
+    return schema
+    
+def dict_set_defaults(org_d, default_d):
+    for key in default_d.keys():
+        if not key in org_d:
+            default_val = default_d[key]
+            org_d[key] =default_val
+    
+    return org_d
+
+def int_clip(i,min_n,max_n):
+    i = max(min( max_n, i), min_n)
+    return i
+
+def str_ident(s, pad ):
+    return ''.join(pad+line for line in s.splitlines(True)) 
+
+def str2int(s):
+    if s is None: 
+        return None
+    if not isinstance(s, str):
+        s = str(s)
+    i = None
+    try: 
+        i = int(s)
+    except Exception as e:
+        logger.warning(str(e))
+    return i
 
 def get_ext(path,with_dot=False):
     basename = os.path.basename(path)  # os independent
@@ -47,7 +98,7 @@ def get_temp_file(name=None,suffix=None):
 
 def download_url(url, local_path, ua=True):
 
-    print(f'download_url url:{url} >> local path:{local_path}')    
+    logger.info(f'download_url url:{url} >> local path:{local_path}')    
 
     if os.path.exists(local_path):
         logger.debug(f'local path exists ... using cached value') 
@@ -120,6 +171,28 @@ def since_ms( start_ms, finish_ms = None ):
     if finish_ms is None:
         finish_ms = now_ms()
     return finish_ms - start_ms
+
+start_time = 0
+last_time = 0
+count = 0
+
+def print_ts(title, reset=False):
+    global start
+    global last_time
+    global count
+
+    if reset:
+        start = now_ms()
+        last_time = start
+        count = 0
+    
+    now = now_ms()
+    dt  = since_ms(start, now)
+    ddt = since_ms(last_time, now)
+    last_time = now
+
+    logger.info(f'ts: {title} {count}:{dt}:{ddt}')
+    count = count + 1
 
 def rmsdiff(im1, im2):
     im1 = im1.convert("RGBA")

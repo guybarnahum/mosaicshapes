@@ -74,3 +74,8 @@ docker rm $(docker ps -aq)
 docker image rm <image-id>
 docker image prune
 ```
+
+## Known Issues
+
+### Temp file leaks when worker is terminated by system
+

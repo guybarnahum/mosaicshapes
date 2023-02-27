@@ -1,34 +1,44 @@
-
 from multiprocessing.dummy import Pool as ThreadPool
-from grid import Grid
 import argparse
+
+import os, sys
+file_dir = os.path.dirname(__file__)
+sys.path.append(file_dir)
+
+from grid import Grid
 from util import *
-import math
+
 import logging
 
-logger = logging.getLogger(__name__)  # the __name__ resolve to "run"
+logger = logging.getLogger(__name__)  # the __name__ resolve to "mosaic"
                                       # This will load the root logger
-def run(ops):
 
-    url         = ops['url']
-    local_path  = ops['local_path' ]
-    output_path = ops['output_path']
-    multi       = ops['multi']
-    diamond     = ops['diamond']
-    color       = ops['color']
-    working_res = ops['working_res']
-    enlarge     = ops['enlarge']
-    pool        = ops['pool']
+def mosaic(ops, progress_callback ):
 
-    print(f'local_path:{local_path}')
-    print(f'output_path:{output_path}')
-    print(f'pix_multi:{multi}')
-    print(f'diamond:{diamond}')
-    print(f'color:{color}')
-    print(f'working_res:{working_res}')
-    print(f'enlarge:{enlarge}')
-    print(f'pool:{pool}')
-  
+    default_ops = {
+        'multi'   : 0.014,
+        'diamond' : True,
+        'color'   : 1,
+        'working_res' : 0,
+        'enlarge' : 2000,
+        'pool'    : 1
+    }
+    
+    ops = dict_set_defaults( ops, default_ops )
+
+    logger.info(f'ops:{ops}')
+    
+    url = ops['url']
+    url = convert_url(url)
+
+    if url is None:
+        url = ops['url']
+        logger.error(f'Unknown url : {url}' )
+        return -1, None
+
+    local_path  = ops['local_path' ] if 'local_path' in ops else get_temp_file()
+    output_path = ops['output_path'] if 'output_path' in ops else None
+
     try:
         if url : # pass empty url to process local image path
             local_path = download_url(url, local_path)
@@ -41,8 +51,19 @@ def run(ops):
         logger.error(f'Could not download image from {url}' )
         return -1, None
 
+    if not output_path:
+        output_path = '/public/output-' + ops['uid'] + get_ext(local_path, with_dot=True)
+
+    multi       = ops['multi']
+    diamond     = ops['diamond']
+    color       = ops['color']
+    working_res = ops['working_res']
+    enlarge     = ops['enlarge']
+    pool        = ops['pool']
+
     grid = Grid(local_path, pix=0, pix_multi=multi, diamond=diamond,
-                colorful=color, working_res=working_res, enlarge=enlarge)
+                colorful=color, working_res=working_res, enlarge=enlarge,
+                progress_callback=progress_callback)
 
     total_updates = 20
     step_size = clamp_int(int(math.ceil(grid.rows/(1.0*total_updates))), 1, 10000)
@@ -62,49 +83,25 @@ def run(ops):
         
     # double check that we are not doing double work
     try:
-        pool = ThreadPool(8)
+        pool = ThreadPool(10)
         pool.map(grid.grid_start_end_thread, todos)
         pool.close()
         pool.join()
     except (KeyboardInterrupt, SystemExit):
         pool.terminate()
 
-    ext = get_ext(local_path, with_dot=True)
-    output_path = output_path + ext 
     grid.save(output_path)
 
+    # Cleanup local copy
+    if local_path:
+        if  os.path.isfile(local_path):
+            os.remove(local_path)
+            logger.info(f'local file removed :{local_path}')
+        else:
+            logger.warning( f'local file does not exist :{local_path}')
+
     return 0, output_path
-    #
-    #
-    # print 100in
-    # grid.grid_start_end(0, grid.rows)
-    # grid.save(output_path)
 
-    # if e_index < grid.rows:
-    #     s_index = ending_index
-    #     e_index = grid.rows
-    #     grid.grid_start_end(s_index, e_index)
-    #     grid.save(output_path)
-    #     print 100
-
-
-def run_defaults( ops ):
-    
-    print_dict(ops)
-    uid = ops['uid']
-    
-    ops['output_path'] = '/tmp/out-' + str(uid) 
-    ops['multi'  ] = 0.014
-    ops['diamond'] = True
-    ops['color'  ] = 1
-    ops['working_res'] = 0
-    ops['enlarge'] = 2000
-    ops['pool']    = 1
-
-    print(f'ops={ops}')
-    rc, output_path = run(ops)
-
-    return rc, output_path
 
 def main():
     parser = argparse.ArgumentParser(description='Mosaic photos')
@@ -146,8 +143,7 @@ def main():
         return 0
 
     ops = {
-        'url' : url,
-        'local_path': local_path,
+        'url'       : url,
         'output_path': args.out,
         'multi'     : args.multi,
         'diamond'   : args.diamond,
@@ -157,10 +153,9 @@ def main():
         'pool'      : args.pool
     }
 
-    run( ops )
+    mosaic( ops )
 
     return 0
-
 
 if __name__ == "__main__":
     main()

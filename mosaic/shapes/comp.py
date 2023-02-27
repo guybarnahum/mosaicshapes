@@ -1,12 +1,10 @@
 
-
 from PIL import Image, ImageDraw
 from numpy.random import randint
 from random import shuffle
 import colorsys
 from shapes.cell import Cell
 import util
-
 
 """
 

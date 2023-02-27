@@ -5,20 +5,20 @@ from starlette.responses import Response
 import json
 
 # misc utils
-from os import path
-from util import *
+from os import path, listdir
 
 # fastapi
-from fastapi import BackgroundTasks
 from fastapi import FastAPI
+from fastapi import BackgroundTasks
+from fastapi.responses import FileResponse
+from fastapi import HTTPException
 
 from fastapi_utils.session import FastAPISessionMaker
 from fastapi_utils.tasks import repeat_every
 import logging
 
 # app
-from run import run,run_defaults
-from jobs import *
+import tasks 
 
 base_dir = path.dirname(path.abspath(__file__))
 log_cfg_path = path.join(base_dir, 'logging.cfg')
@@ -31,7 +31,16 @@ logger = logging.getLogger(__name__) # the __name__ resolve to "main" since we a
                                      # This will get the root logger since no logger in the configuration has this name.
 
 app = FastAPI()
-jobs = Jobs()
+
+import time
+
+def now_ms():
+    return int( time.time_ns() / (1000*1000) )
+
+def since_ms( start_ms, finish_ms = None ):
+    if finish_ms is None:
+        finish_ms = now_ms()
+    return finish_ms - start_ms
 
 '''
 '''
@@ -63,47 +72,42 @@ async def alive():
     logger.info("alive check")
     return {'status': 'alive'}
 
-#post
-@app.get("/exec/{url}", status_code=HTTPStatus.ACCEPTED)
-async def task_handler(url: str, background_tasks: BackgroundTasks):
-    job = JobCreateMosaic()
-    job.args['url'] = b642str(url)
-    background_tasks.add_task(jobs.start_job, job )
-    return job
-
-@app.get("/job-status/{uid}")
-async def job_status_handler(uid: str):
-    try:
-        rc = jobs.get_job(uid)
-    except Exception as e:
-        rc = Response(str(e), status_code=400)
-    return rc
-
-@app.get("/job-list/")
-async def job_list_handler():
-    js = jobs.toJSON()
-    print(js)
-    return Response(js, status_code=200)
-
-@app.get("/job-delete/{uid}")
-async def job_delete_handler(uid: str):
-    try:
-        jobs.purge(uid)
-        rc = uid
-    except Exception as e:
-        rc = Response(str(e), status_code=400)
-    return rc
-
-@app.on_event("startup")
-async def startup_event():
-    app.state.executor = jobs.get_executer()
-
-@app.on_event("shutdown")
-async def on_shutdown():
-   app.state.executor.shutdown()
-
 @app.on_event("startup")
 @repeat_every(seconds=60*60)  # 1 hour
 def every_hour() -> None:
     logger.info('every_hour')
-    jobs.expired_jobs_handler()
+  
+@app.get('/mosaic/{url}')
+def mosaic(url):
+    ops = {'url': url}
+    res = tasks.enqueue_mosaic_task(ops)
+    uid = res.task_id
+    logger.info(f'mosaic uid:{uid}')
+    return { 'uid' : uid }
+
+@app.get('/state/{uid}')
+def state(uid):
+    res = tasks.state(uid)
+    return res
+
+@app.get('/inspect')
+def inspect():
+    res = tasks.inspect()
+    return res
+
+@app.get("/file/{file}")
+async def read_file(file):
+    # notice you can use FileResponse now because it expects a path
+
+    files = listdir('/public')
+    print(f'files /public {files}')
+
+    files = listdir('.')
+    print(f'files . {files}')
+
+    logger.info(f'file: {file}')
+    public_path = '/public/' + file
+    logger.info(f'public_path: {public_path}')
+    if not path.isfile(public_path):
+        raise HTTPException(status_code=404, detail="file '" + file + "' not found")
+    return FileResponse(public_path)

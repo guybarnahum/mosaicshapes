@@ -16,6 +16,11 @@ import imghdr
 from gencolor import GenColor
 import math
 import logging
+
+import os, sys
+parent_dir = os.path.abspath('.')
+sys.path.insert(1, parent_dir)
+
 import util
 
 # get root logger
@@ -36,11 +41,15 @@ x - 2x1 rectcell is not centered
 
 class Grid():
     def __init__(self, imgpath, pix=0, pix_multi=-1, diamond=True, 
-                 colorful=True, unsharp_radius=2, working_res=0, enlarge=0):
+                 colorful=True, unsharp_radius=2, working_res=0, enlarge=0,progress_callback=None):
+
+        util.print_ts('grid.__init__', reset = True)
 
         self.N = 2
         self.is_diamond = diamond
         self.is_colorful = int(colorful)
+        self.progress_callback = progress_callback
+        self.progress = 0
 
         try:
             data = Image.open(imgpath)
@@ -89,10 +98,10 @@ class Grid():
         self.canvas_img = util.mult_img_size(self.og_image, self.N)
         self.edg_img = self.og_image.filter(ImageFilter.UnsharpMask(2, percent=300))
         self.image_array = np.array(self.edg_img)
+
         # Find edges
         self.img_edges = feature.canny(rgb2gray(self.image_array), sigma=2)
         self.width, self.height = self.og_image.size
-
 
         #  Determine our grid size:
         longest = self.width if self.width > self.height else self.height
@@ -276,11 +285,25 @@ class Grid():
             self.og_size[1] + (self.canvas_img.size[1] - self.og_size[1])/2,
         ))
 
+    def update_progress(self, add=None, set=None):
+        if set:
+            self.progress = set
+        if add:
+            self.progress = self.progress + add
+
+        if self.progress_callback:
+           self.progress_callback(progress=self.progress)
+        else:
+            logger.warn(f'grid progress: {self.progress}')
+
     def save(self, path, dpi=300, is_continue=False):
+
+        self.update_progress(add=5)
+        util.print_ts('grid.save.0')
+
         if self.is_diamond:
             diamond_img = util.mult_img_size(self.canvas_img.copy(), .5)
             diamond_img = diamond_img.rotate(-45, expand=False, resample=Image.BICUBIC)
-
             diamond_img = diamond_img.crop((
                 (diamond_img.size[0] - self.target_size[0])/2 + self.pixels,
                 (diamond_img.size[1] - self.target_size[1])/2 + self.pixels,
@@ -293,6 +316,8 @@ class Grid():
             grid_img = self.canvas_img.copy()
             if not is_continue:
                 grid_img = self.crop_grid(grid_img, self.N)
+
             grid_img = util.restrain_img_size(grid_img, self.enlarge)
             grid_img.save(path, "jpeg", icc_profile=self.og_image.info.get('icc_profile'),
                           quality=95, dpi=(dpi,dpi))
+
