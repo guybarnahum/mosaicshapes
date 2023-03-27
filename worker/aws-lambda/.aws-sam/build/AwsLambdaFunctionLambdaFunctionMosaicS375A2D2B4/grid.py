@@ -55,7 +55,6 @@ class Grid():
         self.is_colorful = int(colorful)
         self.progress_callback = progress_callback
         self.progress = 0
-        self.max_area = 1024 * 1024 * 2
 
     @profile # <-- run with -m memory_profiler to activate
     def setup(self,imgpath, pix=0, pix_multi=-1,working_res=0, enlarge=0):
@@ -66,15 +65,6 @@ class Grid():
         self.og_image = util.image_transpose_exif(data)
         self.width, self.height = self.og_image.size
         logger.info(f'og image: {self.width}x{self.height}')
-
-        # Image too large? Resize!
-        area = self.width * self.height
-        if area > self.max_area:
-            scale = math.sqrt(self.max_area / area)
-            new_size = (int(self.width * scale), int(self.height * scale))
-            self.og_image = self.og_image.resize(new_size)
-            self.width, self.height = self.og_image.size
-            logger.info(f'Resize og image: {self.width}x{self.height}')
 
         if enlarge > 0:
             self.enlarge = enlarge
@@ -141,7 +131,7 @@ class Grid():
         # Crop the image if our pixels doesn't divide equally.  Most cases we always crop
         # will prevent out of bounds processing on cells
         # XXX Does this work for diamonds too?
-        # self.og_image = self.og_image.crop((0, 0, self.cols*self.pixels, self.rows*self.pixels))
+        self.og_image = self.og_image.crop((0, 0, self.cols*self.pixels, self.rows*self.pixels))
         self.grid_status = np.zeros([self.width//self.pixels, self.height//self.pixels])
 
     # By default we occupy one cell at a time.  x_total is number of additional horizontal

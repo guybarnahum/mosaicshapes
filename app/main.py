@@ -44,13 +44,13 @@ def since_ms( start_ms, finish_ms = None ):
 
 '''
 '''
-@app.middleware('http')
-async def catch_exceptions_middleware(request: Request, call_next):
-    try:
-        return await call_next(request)
-    except Exception as e:
-        logger.error(str(e))
-        return Response("Internal server error", status_code=500)
+#@app.middleware('http')
+#async def catch_exceptions_middleware(request: Request, call_next):
+#    try:
+#        return await call_next(request)
+#    except Exception as e:
+#        logger.error(str(e))
+#        return Response("Internal server error", status_code=500)
 
 @app.middleware('http')
 async def log_requests(request: Request, call_next):
@@ -78,8 +78,17 @@ def every_hour() -> None:
     logger.info('every_hour')
   
 @app.get('/mosaic/{url}')
-def mosaic(url):
-    ops = {'url': url}
+def mosaic(url, request: Request):
+    qp = dict(request.query_params)
+    ops= {}
+
+    if 'enlarge' in qp:
+        ops['enlarge'] = int(qp['enlarge'])
+
+    if 'multi' in qp:
+        ops['multi'] = float(qp['multi'])
+
+    ops['url'] = url
     res = tasks.enqueue_mosaic_task(ops)
     uid = res.task_id
     logger.info(f'mosaic uid:{uid}')
@@ -94,20 +103,3 @@ def state(uid):
 def inspect():
     res = tasks.inspect()
     return res
-
-@app.get("/file/{file}")
-async def read_file(file):
-    # notice you can use FileResponse now because it expects a path
-
-    files = listdir('/public')
-    print(f'files /public {files}')
-
-    files = listdir('.')
-    print(f'files . {files}')
-
-    logger.info(f'file: {file}')
-    public_path = '/public/' + file
-    logger.info(f'public_path: {public_path}')
-    if not path.isfile(public_path):
-        raise HTTPException(status_code=404, detail="file '" + file + "' not found")
-    return FileResponse(public_path)

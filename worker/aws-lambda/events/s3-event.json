@@ -1,0 +1,38 @@
+{
+    "Records": [
+        {
+            "eventVersion": "2.1",
+            "eventSource": "aws:s3",
+            "awsRegion": "us-west-2",
+            "eventTime": "2023-03-19T03:38:23.996Z",
+            "eventName": "ObjectCreated:Put",
+            "userIdentity": {
+                "principalId": "A24IUTIS3ZV2DO"
+            },
+            "requestParameters": {
+                "sourceIPAddress": "70.162.87.19"
+            },
+            "responseElements": {
+                "x-amz-request-id": "7G4B666RXPWYV1HF",
+                "x-amz-id-2": "W8SMEfA0jYnrSpjQ1akze6kTN8lhivqlUyys9O3S0HtztecwhYsOz2TAQ1ZeNopT7qPvE3Cqzd96EdiNTO8jSY0kRD9RVeAp"
+            },
+            "s3": {
+                "s3SchemaVersion": "1.0",
+                "configurationId": "tf-s3-lambda-20230314183416761700000002",
+                "bucket": {
+                    "name": "lambda-mosaic-s3-bucket-us-west-2",
+                    "ownerIdentity": {
+                        "principalId": "A24IUTIS3ZV2DO"
+                    },
+                    "arn": "arn:aws:s3:::lambda-mosaic-s3-bucket-us-west-2"
+                },
+                "object": {
+                    "key": "input/cat-1455468_1280.jpg",
+                    "size": 416353,
+                    "eTag": "ad398946d0052a435fff40a123ad90dd",
+                    "sequencer": "00641683AFE46314A8"
+                }
+            }
+        }
+    ]
+}

@@ -3,7 +3,7 @@ services:
   rabbit:
     image: rabbitmq:latest
     volumes:
-      - ./rabbitmq.config:/etc/rabbitmq/rabbitmq.config
+      - ./rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
 
   redis:
     image: redis:latest
@@ -21,8 +21,22 @@ services:
     image: mosaicshapes:latest
     entrypoint: celery -A worker.tasks worker --loglevel=INFO
     volumes:
-      - ./output:/output
+      - ./public:/public
       - ./tmp:/tmp
+    environment:
+      CELERY_BROKER_URL: pyamqp://guest@rabbit//
+      CELERY_RESULT_BACKEND: redis://redis:6379/0
     depends_on:
       - redis
       - rabbit
+
+  flower:
+    image: mher/flower
+    ports:
+      - 5555:5555
+    environment:
+      CELERY_BROKER_URL: pyamqp://guest@rabbit//
+      CELERY_RESULT_BACKEND: redis://redis:6379/0
+    depends_on:
+      - worker
+      - redis

@@ -23,7 +23,6 @@ pytz>=2016.10
 scipy>=0.18.1
 singledispatch>=3.4.0.3
 six>=1.10.0
-scikit-image>=0.19.3
 scikit-learn>=1.2.1
 snakeviz>=0.4.1
 subprocess32>=3.2.7

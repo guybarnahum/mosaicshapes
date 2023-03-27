@@ -28,7 +28,7 @@ def mosaic(ops, progress_callback = None ):
         'diamond' : True,
         'color'   : 1,
         'working_res' : 0,
-        'enlarge' : 0,
+        'enlarge' : 1024,
         'pool'    : 1
     }
     
