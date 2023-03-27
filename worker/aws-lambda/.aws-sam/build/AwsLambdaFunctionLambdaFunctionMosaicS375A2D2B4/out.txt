@@ -1,2 +1,0 @@
-define decorator!
-args: Namespace(urls=['https://lambda-mosaic-s3-bucket-us-west-2.s3.us-west-2.amazonaws.com/input/bryan.jpg'], diamond=True, color='1', analogous=False, working_res=0, enlarge=2000, multi=1.0, pool=1, out='/tmp/out.jpg', base64url=False, download_only=False)
