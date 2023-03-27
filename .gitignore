@@ -37,8 +37,8 @@ tmp/*
 .LSOverride
 
 # AWS SAM
-.aws-sam/
-.aws-sam-iac/
+*.aws-sam/
+*.aws-sam-iac/
 packaged.yaml
 samconfig.toml
 *.db
