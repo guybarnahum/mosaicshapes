@@ -1,12 +1,46 @@
-*.pyc
-.DS_Store
-app/.DS_Store
+
+### Python ###
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
 boto.cfg
 test.cfg
+
+.DS_Store
+app/.DS_Store
+
 tmp/*
 /public
 
-**/.DS_Store
+### OSX ###
+*.DS_Store
+.AppleDouble
+.LSOverride
+
+# AWS SAM
+.aws-sam/
+packaged.yaml
+samconfig.toml
+*.db
 
 # Local .terraform directories
 **/.terraform/*
@@ -42,3 +76,7 @@ override.tf.json
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
+
+# teraaform state 
+# This file is maintained automatically by "terraform init"
+.terraform.lock.hcl
