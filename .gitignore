@@ -30,6 +30,7 @@ app/.DS_Store
 
 tmp/*
 /public
+*.zip
 
 ### OSX ###
 *.DS_Store

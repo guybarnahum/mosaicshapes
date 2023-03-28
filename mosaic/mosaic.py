@@ -24,7 +24,7 @@ except NameError:
 def mosaic(ops, progress_callback = None ):
 
     default_ops = {
-        'multi'   : 0.020,
+        'multi'   : 0.018,
         'diamond' : True,
         'color'   : 1,
         'working_res' : 0,
