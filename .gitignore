@@ -86,3 +86,6 @@ worker/aws-lambda/.aws-sam-iacs/iacs_metadata/z_samcli_backend_override
 worker/aws-lambda/.aws-sam-iacs/iacs_metadata/copy_terraform_built_artifacts.py
 worker/aws-lambda/.aws-sam-iacs/iacs_metadata/Makefile
 worker/aws-lambda/.aws-sam-iacs/iacs_metadata/template.json
+worker/aws-lambda/lambda-*.zip
+worker/aws-lambda/lambda-hourly-event.zip
+worker/aws-lambda/lambda-mosaic-s3.zip
