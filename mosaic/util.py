@@ -17,19 +17,22 @@ import imghdr
 import logging
 
 logger = logging.getLogger(__name__)  # the __name__ resolve to "util"
-                                      # This will load the root logger
+# This will load the root logger
+
 
 def dict_set_defaults(org_d, default_d):
     for key in default_d.keys():
         if not key in org_d:
             default_val = default_d[key]
-            org_d[key] =default_val
-    
+            org_d[key] = default_val
+
     return org_d
+
 
 print_ts_start_time = 0
 print_ts_last_time = 0
 print_ts_count = 0
+
 
 def print_ts(title, reset=False):
     global print_ts_start
@@ -40,22 +43,25 @@ def print_ts(title, reset=False):
         print_ts_start = now_ms()
         print_ts_last_time = print_ts_start
         print_ts_count = 0
-    
+
     now = now_ms()
-    dt  = since_ms(print_ts_start, now)
+    dt = since_ms(print_ts_start, now)
     ddt = since_ms(print_ts_last_time, now)
     print_ts_last_time = now
 
-    logger.info(f'ts: {title} {print_ts_count}:{dt}:{ddt}')
+    logger.info(f"ts: {title} {print_ts_count}:{dt}:{ddt}")
     print_ts_count = print_ts_count + 1
 
-def now_ms():
-    return int( time.time_ns() / (1000*1000) )
 
-def since_ms( start_ms, finish_ms = None ):
+def now_ms():
+    return int(time.time_ns() / (1000 * 1000))
+
+
+def since_ms(start_ms, finish_ms=None):
     if finish_ms is None:
         finish_ms = now_ms()
     return finish_ms - start_ms
+
 
 def rmsdiff(im1, im2):
     im1 = im1.convert("RGBA")
@@ -65,20 +71,22 @@ def rmsdiff(im1, im2):
     h = diff.histogram()
 
     blah = np.array(h, dtype=int)
-    okay = (np.arange(1024) % 256)**2
-    rms = sqrt(np.sum(blah*okay)/float(im1.size[0] * im1.size[1]))
+    okay = (np.arange(1024) % 256) ** 2
+    rms = sqrt(np.sum(blah * okay) / float(im1.size[0] * im1.size[1]))
 
     return rms
 
+
 def print_dict(d):
     for i in d:
-        print(f'{i} = {d[i]}')
+        print(f"{i} = {d[i]}")
+
 
 def get_multi(im, min_size):
     w, h = im.size
     if w > h:
-        return float(min_size)/w
-    return float(min_size)/h
+        return float(min_size) / w
+    return float(min_size) / h
 
 
 def restrain_img_size(im, max_pix=1700):
@@ -91,8 +99,8 @@ def restrain_img_size(im, max_pix=1700):
 
 
 def mult_img_size(im, scale):
-    w, h = int(im.size[0]*scale), int(im.size[1]*scale)
-    logger.debug(f'mult_img_size({w},{h}) scale:{scale}')
+    w, h = int(im.size[0] * scale), int(im.size[1] * scale)
+    logger.debug(f"mult_img_size({w},{h}) scale:{scale}")
     if scale > 1:
         im = im.resize((w, h), Image.ANTIALIAS)
     else:
@@ -104,14 +112,14 @@ def enlarge_img(im, max_pix=9000):
     w, h = im.size
     if w < max_pix and h < max_pix:
         if w > h:
-            m = float(max_pix)/w
-            h = int(m*h)
+            m = float(max_pix) / w
+            h = int(m * h)
             w = max_pix
 
             resize = (w, h)
         else:
-            m = float(max_pix)/h
-            w = int(m*w)
+            m = float(max_pix) / h
+            w = int(m * w)
             h = max_pix
             resize = (w, h)
         im = im.resize(resize, Image.ANTIALIAS)
@@ -120,8 +128,8 @@ def enlarge_img(im, max_pix=9000):
 
 
 def png_to_jpeg(im):
-    im=im.convert('RGB')
-    og_image_rgb = Image.new("RGB", im.size, (255,255,255))
+    im = im.convert("RGB")
+    og_image_rgb = Image.new("RGB", im.size, (255, 255, 255))
     og_image_rgb.paste(im)
     return og_image_rgb
 
@@ -137,7 +145,7 @@ def clamp_int(val, minval, maxval):
 
 def image_transpose_exif(im):
     exif_orientation_tag = 0x0112  # contains an integer, 1 through 8
-    exif_transpose_sequences = [   # corresponding to the following
+    exif_transpose_sequences = [  # corresponding to the following
         [],
         [Image.FLIP_LEFT_RIGHT],
         [Image.ROTATE_180],
@@ -155,23 +163,25 @@ def image_transpose_exif(im):
     else:
         return functools.reduce(lambda im, op: im.transpose(op), seq, im)
 
+
 def average_color_img(image):
-    result = image.quantize(colors=1).convert('RGB').getcolors()
+    result = image.quantize(colors=1).convert("RGB").getcolors()
     return result[0][1]
+
 
 # deprecated in favor of average_color_img
 def average_color(image, rect=None):
-    if not rect:            # Use whole image
+    if not rect:  # Use whole image
         w, h = image.size
         x0, y0 = (0, 0)
         x1, y1 = (w, h)
-    else:                   # Use subset rect of image
+    else:  # Use subset rect of image
         x0, y0, x1, y1 = rect
         w = abs(x0 - x1)
         h = abs(y0 - y1)
 
     r, g, b = 0, 0, 0
-    area = w*h
+    area = w * h
 
     for x in range(x0, x1):
         for y in range(y0, y1):
@@ -180,24 +190,31 @@ def average_color(image, rect=None):
             g += cg
             b += cb
 
-    return (r/area, g/area, b/area)
+    return (r / area, g / area, b / area)
 
-DEG30 = 30/360.
+
+DEG30 = 30 / 360.0
+
+
 def adjacent_colors(color, d=DEG30):  # Assumption: r, g, b in [0, 255]
     r, g, b = color
-    r, g, b = map(lambda x: x/255., [r, g, b])  # Convert to [0, 1]
-    h, l, s = colorsys.rgb_to_hls(r, g, b)      # RGB -> HLS
-    h = [(h+d) % 1 for d in (-d, d)]            # Rotation by d
+    r, g, b = map(lambda x: x / 255.0, [r, g, b])  # Convert to [0, 1]
+    h, l, s = colorsys.rgb_to_hls(r, g, b)  # RGB -> HLS
+    h = [(h + d) % 1 for d in (-d, d)]  # Rotation by d
 
-    adjacent = [map(lambda x: int(round(x*255)), colorsys.hls_to_rgb(hi, l, s))
-            for hi in h]  # H'LS -> new RGB
+    adjacent = [
+        map(lambda x: int(round(x * 255)), colorsys.hls_to_rgb(hi, l, s)) for hi in h
+    ]  # H'LS -> new RGB
 
     adjacent[0] = tuple(adjacent[0])
     adjacent[1] = tuple(adjacent[1])
     return adjacent
 
+
 rgb_scale = 255
 cmyk_scale = 100
+
+
 def rgb_to_cmyk(r, g, b):
     if (r == 0) and (g == 0) and (b == 0):
         # black
@@ -210,28 +227,30 @@ def rgb_to_cmyk(r, g, b):
 
     # extract out k [0,1]
     min_cmy = min(c, m, y)
-    c = (c - min_cmy)
-    m = (m - min_cmy)
-    y = (y - min_cmy)
+    c = c - min_cmy
+    m = m - min_cmy
+    y = y - min_cmy
     k = min_cmy
 
     # rescale to the range [0,cmyk_scale]
-    return c*cmyk_scale, m*cmyk_scale, y*cmyk_scale, k*cmyk_scale
+    return c * cmyk_scale, m * cmyk_scale, y * cmyk_scale, k * cmyk_scale
 
 
 def cmyk_to_rgb(c, m, y, k):
-    """
-    """
-    r = rgb_scale*(1.0-(c+k)/float(cmyk_scale))
-    g = rgb_scale*(1.0-(m+k)/float(cmyk_scale))
-    b = rgb_scale*(1.0-(y+k)/float(cmyk_scale))
-    return int(r),int(g),int(b)
+    """ """
+    r = rgb_scale * (1.0 - (c + k) / float(cmyk_scale))
+    g = rgb_scale * (1.0 - (m + k) / float(cmyk_scale))
+    b = rgb_scale * (1.0 - (y + k) / float(cmyk_scale))
+    return int(r), int(g), int(b)
 
 
 def hilo(a, b, c):
-    if c < b: b, c = c, b
-    if b < a: a, b = b, a
-    if c < b: b, c = c, b
+    if c < b:
+        b, c = c, b
+    if b < a:
+        a, b = b, a
+    if c < b:
+        b, c = c, b
     return a + c
 
 
@@ -239,17 +258,20 @@ def complement(r, g, b):
     k = hilo(r, g, b)
     return tuple(k - u for u in (r, g, b))
 
+
 # http://stackoverflow.com/questions/596216/formula-to-determine-brightness-of-rgb-color
 # third option half way page down
 def luminance(r, g, b):
-    return math.sqrt(0.299 * math.pow(r, 2) + 0.587 * math.pow(g, 2) + 0.114 * math.pow(b, 2))
+    return math.sqrt(
+        0.299 * math.pow(r, 2) + 0.587 * math.pow(g, 2) + 0.114 * math.pow(b, 2)
+    )
 
 
 def tint_to_lum(color, lum):
     r, g, b = color
     nR, nG, nB = r, g, b
     while True:
-        tint_factor = .005
+        tint_factor = 0.005
 
         nR = nR + (255 - nR) * tint_factor
         nG = nG + (255 - nG) * tint_factor
@@ -268,11 +290,13 @@ def tint_to_lums(color, base_colors, lum):
         lum_total += luminance(col[0], col[1], col[2])
 
     while True:
-        tint_factor = .005
+        tint_factor = 0.005
         nR = nR + (255 - nR) * tint_factor
         nG = nG + (255 - nG) * tint_factor
         nB = nB + (255 - nB) * tint_factor
-        if (luminance(nR, nG, nB) + lum_total)/(len(base_colors)+1) >= lum or (luminance(nR, nG, nB) >= 254):
+        if (luminance(nR, nG, nB) + lum_total) / (len(base_colors) + 1) >= lum or (
+            luminance(nR, nG, nB) >= 254
+        ):
             break
 
     return int(nR), int(nG), int(nB)
@@ -283,7 +307,7 @@ def shade_to_lum(color, lum):
     r, g, b = color
     nR, nG, nB = r, g, b
     while True:
-        shade_factor = .005
+        shade_factor = 0.005
         nR = nR * (1 - shade_factor)
         nG = nG * (1 - shade_factor)
         nB = nB * (1 - shade_factor)

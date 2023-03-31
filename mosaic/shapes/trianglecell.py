@@ -1,10 +1,8 @@
-
-
 from PIL import Image, ImageDraw, ImageOps
 import numpy as np
 from colorpalette import ColorPalette
 from shapes.cell import Cell, Quadrant
-import util 
+import util
 
 """
 
@@ -19,9 +17,14 @@ xxx: 3/25, shrink is not implemented
 
 
 class TriangleCell(Cell):
-    def __init__(self, size=(200, 200), base_colors=[], second_colors=[],
-                 shrink=0, quadrant=Quadrant.top_left):
-
+    def __init__(
+        self,
+        size=(200, 200),
+        base_colors=[],
+        second_colors=[],
+        shrink=0,
+        quadrant=Quadrant.top_left,
+    ):
         self.width = size[0]
         self.height = size[1]
 
@@ -46,18 +49,25 @@ class TriangleCell(Cell):
     def find_best(img, base_colors=[], second_colors=[], N=2):
         color_combos = [[second_colors, base_colors], [base_colors, second_colors]]
         # color_combos = [[second_colors,base_colors]]
-        quads = [Quadrant.top_left, Quadrant.top_right, Quadrant.bottom_left, Quadrant.bottom_right]
+        quads = [
+            Quadrant.top_left,
+            Quadrant.top_right,
+            Quadrant.bottom_left,
+            Quadrant.bottom_right,
+        ]
 
         w, h = img.size
         best_img = None
         best_score = 10000
         for quad in quads:
             for color_combo in color_combos:
-                trect = TriangleCell(size=(w, h),
-                                     base_colors=color_combo[0],
-                                     second_colors=color_combo[1],
-                                     shrink=0,
-                                     quadrant=quad)
+                trect = TriangleCell(
+                    size=(w, h),
+                    base_colors=color_combo[0],
+                    second_colors=color_combo[1],
+                    shrink=0,
+                    quadrant=quad,
+                )
 
                 timg = trect.draw(N=1)
                 score = util.rmsdiff(img, timg)
@@ -70,9 +80,17 @@ class TriangleCell(Cell):
     # return the perceived hue / luminance for now
     def draw(self, N=2):
         # pw = 4 #(self.width/len(self.colors))/2
-        n_width, n_height = int(self.width*N), int(self.height*N)
+        n_width, n_height = int(self.width * N), int(self.height * N)
         shortest = n_width if n_width < n_height else n_height
-        pw = int(round(.5 * .5 * shortest * 1/(len(self.colors) + len(self.colors_secondary))))
+        pw = int(
+            round(
+                0.5
+                * 0.5
+                * shortest
+                * 1
+                / (len(self.colors) + len(self.colors_secondary))
+            )
+        )
         pw = util.clamp_int(pw, 1, 10000)
         # pw = 6
         # print (pw)
@@ -80,35 +98,34 @@ class TriangleCell(Cell):
         # pw = 1
         # print (pw)
         # import pdb; pdb.set_trace()
-        paper = Image.new('RGBA', (n_width, n_height))
+        paper = Image.new("RGBA", (n_width, n_height))
         canvas = ImageDraw.Draw(paper, paper.mode)
 
         """
         draw border square
         """
         for idx, color in enumerate(self.colors_secondary):
-            paper.paste(color, [pw*idx, pw*idx, (n_width-pw*idx), (n_height-pw*idx)])
+            paper.paste(
+                color, [pw * idx, pw * idx, (n_width - pw * idx), (n_height - pw * idx)]
+            )
 
         """
         draw triangles
         """
 
-        x_offset = pw*(len(self.colors_secondary))
-        y_offset = pw*(len(self.colors_secondary))
+        x_offset = pw * (len(self.colors_secondary))
+        y_offset = pw * (len(self.colors_secondary))
 
         for idx, color in enumerate(self.colors):
             color = int(color[0]), int(color[1]), int(color[2])
-            width, height = n_width-pw*idx, n_height-pw*idx
-            sx = (pw*idx + x_offset)
-            sy = (pw*idx + y_offset)
+            width, height = n_width - pw * idx, n_height - pw * idx
+            sx = pw * idx + x_offset
+            sy = pw * idx + y_offset
 
             # sx = int(round(len(self.colors)*pw/2.0))
             # sx += (pw*idx)
             ex = n_width - sx
-            coord = [(sx + pw*idx),
-                     sy,
-                     (ex, sy),
-                     (ex, (height-sy-idx))]
+            coord = [(sx + pw * idx), sy, (ex, sy), (ex, (height - sy - idx))]
             canvas.polygon(coord, fill=color)
 
         if self.quadrant == Quadrant.top_right:

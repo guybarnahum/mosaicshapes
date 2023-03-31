@@ -1,9 +1,8 @@
-
 from PIL import Image, ImageDraw
 from numpy.random import randint
 import colorsys
 from shapes.cell import Cell
-import util 
+import util
 
 """
 
@@ -63,31 +62,31 @@ class CompColor(Cell):
 
     # Draws a rect and then a circle inside rect
     def draw_circle(self, N):
-        n_width, n_height = int(self.width*N), int(self.height*N)
+        n_width, n_height = int(self.width * N), int(self.height * N)
         # pw = (n_width/len(self.colors))/randint(2,2) # line width of circles
-        pw = (n_width//len(self.colors))//2  # line width of circles
+        pw = (n_width // len(self.colors)) // 2  # line width of circles
         stretch = 0
 
-        rect_paper = Image.new('RGBA', (n_width, n_height))
+        rect_paper = Image.new("RGBA", (n_width, n_height))
         rect_canvas = ImageDraw.Draw(rect_paper, rect_paper.mode)
 
         for idx, color in enumerate(self.colors):
             color = int(color[0]), int(color[1]), int(color[2])
-            x = pw*idx
-            y = pw*idx
-            ex = (n_width-pw*idx)
-            ey = (n_height-pw*idx)
+            x = pw * idx
+            y = pw * idx
+            ex = n_width - pw * idx
+            ey = n_height - pw * idx
             rect_paper.paste(color, [x, y, ex, ey])
 
-        circle_paper = Image.new('RGBA', (n_width, n_height))
+        circle_paper = Image.new("RGBA", (n_width, n_height))
         circle_canvas = ImageDraw.Draw(circle_paper, circle_paper.mode)
 
         for idx, color in enumerate(self.colors):
             color = int(color[0]), int(color[1]), int(color[2])
-            x = (pw*idx+stretch) + pw//2*(3-1)
-            y = pw*idx
-            ex = (n_width-pw*idx-stretch) - pw//2*(3-1)
-            ey = (n_height-pw*idx)
+            x = (pw * idx + stretch) + pw // 2 * (3 - 1)
+            y = pw * idx
+            ex = (n_width - pw * idx - stretch) - pw // 2 * (3 - 1)
+            ey = n_height - pw * idx
             circle_canvas.ellipse([x, y, ex, ey], fill=color)
 
         circle_paper = circle_paper.rotate(randint(0, 360))
@@ -97,14 +96,16 @@ class CompColor(Cell):
 
     # Draw rect only
     def draw_rect(self, N):
-        n_width, n_height = int(self.width*N), int(self.height*N)
-        paper = Image.new('RGBA', (n_width, n_height))
+        n_width, n_height = int(self.width * N), int(self.height * N)
+        paper = Image.new("RGBA", (n_width, n_height))
         canvas = ImageDraw.Draw(paper)
 
-        pw = (n_width//len(self.colors))//2
+        pw = (n_width // len(self.colors)) // 2
         for idx, color in enumerate(self.colors):
             color = int(color[0]), int(color[1]), int(color[2])
-            paper.paste(color, [pw*idx, pw*idx, n_width-pw*idx, n_height-pw*idx])
+            paper.paste(
+                color, [pw * idx, pw * idx, n_width - pw * idx, n_height - pw * idx]
+            )
 
         return paper
 
