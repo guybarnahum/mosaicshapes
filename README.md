@@ -75,7 +75,7 @@ docker image rm <image-id>
 docker image prune
 ```
 
-## gitignore
+## Varous files
 
 ### boto
 
@@ -87,7 +87,7 @@ aws_access_key_id = <>
 aws_secret_access_key = <>
 ```
 
-### terraform state
+### terraform state / .gitignore
 
 ```console
 # Exclude all .tfvars files, which are likely to contain sensitive data, such as
@@ -103,17 +103,6 @@ override.tf
 override.tf.json
 *_override.tf
 *_override.tf.json
-
-# Include override files you do wish to add to version control using negated pattern
-# !example_override.tf
-
-# Include tfplan files to ignore the plan output of command: terraform plan -out=tfplan
-# example: *tfplan*
-
-# Ignore CLI configuration files
-.terraformrc
-terraform.rc
-
 ```
 
 ## Known Issues
