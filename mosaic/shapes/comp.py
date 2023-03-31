@@ -1,8 +1,11 @@
-from PIL import Image, ImageDraw
-from numpy.random import randint
 import colorsys
-from shapes.cell import Cell
+
+from numpy.random import randint
+from PIL import Image, ImageDraw
+
 import util
+from shapes.cell import Cell
+
 
 """
 

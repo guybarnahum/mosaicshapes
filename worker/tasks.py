@@ -1,18 +1,18 @@
-from celery import Task as celeryTask
-from celery_app import celery_app
-from celery.utils.log import get_task_logger
-from functools import partial
-
 import os
-import worker.aws as aws
-import worker.worker_util as worker_util
-
 # try without this vv
 import sys
+from functools import partial
+
+from celery import Task as celeryTask
+from celery.utils.log import get_task_logger
+
+import worker.aws as aws
+import worker.worker_util as worker_util
+from celery_app import celery_app
+from mosaic.mosaic import mosaic
 
 sys.path.append(".")
 
-from mosaic.mosaic import mosaic
 
 # Create the celery app and get the logger
 logger = get_task_logger(__name__)

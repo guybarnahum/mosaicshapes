@@ -1,6 +1,8 @@
 from PIL import Image, ImageDraw
-from shapes.cell import Cell
+
 import util
+from shapes.cell import Cell
+
 
 """
 XXX: ciwdth and cheight not currently utilized

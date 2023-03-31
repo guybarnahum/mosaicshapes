@@ -1,6 +1,7 @@
 from PIL import Image, ImageDraw
-from shapes.cell import Cell
+
 import util
+from shapes.cell import Cell
 
 
 class CircleCell(Cell):

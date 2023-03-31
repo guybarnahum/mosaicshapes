@@ -1,11 +1,10 @@
-import urllib.request
-import time
 import base64
-import tempfile
-import os
 import imghdr
-
 import logging
+import os
+import tempfile
+import time
+import urllib.request
 
 logger = logging.getLogger(__name__)  # the __name__ resolve to "util"
 # This will load the root logger

@@ -1,8 +1,9 @@
+import logging
+
 import celery.states
 from celery.result import AsyncResult
-from worker.celery_app import celery_app
 
-import logging
+from worker.celery_app import celery_app
 
 logger = logging.getLogger(
     __name__

@@ -1,14 +1,17 @@
+import logging
+import os
+import sys
 from concurrent.futures import ThreadPoolExecutor
+from math import ceil
 
-import os, sys
 
 file_dir = os.path.dirname(__file__)
 sys.path.append(file_dir)
 
-from grid import Grid
+# isort: split
+
 import util
-from math import ceil
-import logging
+from grid import Grid
 
 logger = logging.getLogger(__name__)  # the __name__ resolve to "mosaic"
 # This will load the root logger

@@ -1,21 +1,16 @@
-# Http
-from http import HTTPStatus
-from starlette.requests import Request
-from starlette.responses import Response
 import json
-
-# misc utils
-from os import path, listdir
+import logging
+import time
+from http import HTTPStatus
+from os import listdir, path
 
 # fastapi
-from fastapi import FastAPI
-from fastapi import BackgroundTasks
+from fastapi import BackgroundTasks, FastAPI, HTTPException
 from fastapi.responses import FileResponse
-from fastapi import HTTPException
-
 from fastapi_utils.session import FastAPISessionMaker
 from fastapi_utils.tasks import repeat_every
-import logging
+from starlette.requests import Request
+from starlette.responses import Response
 
 # app
 import tasks
@@ -34,7 +29,6 @@ logger = logging.getLogger(
 
 app = FastAPI()
 
-import time
 
 
 def now_ms():

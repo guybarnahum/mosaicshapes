@@ -1,8 +1,10 @@
-from PIL import Image, ImageDraw, ImageOps
 import numpy as np
+from PIL import Image, ImageDraw, ImageOps
+
+import util
 from colorpalette import ColorPalette
 from shapes.cell import Cell, Quadrant
-import util
+
 
 """
 

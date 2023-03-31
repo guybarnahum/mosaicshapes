@@ -1,12 +1,14 @@
+import os
+import sys
 import unittest
 
-import os, sys
+from PIL import Image
+
+from colorpalette import ColorPalette
 
 parent = os.path.abspath(".")
 sys.path.insert(1, parent)
 
-from colorpalette import ColorPalette
-from PIL import Image
 
 
 class TestColorPalette(unittest.TestCase):

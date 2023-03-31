@@ -1,23 +1,21 @@
-from shapes.comp import CompColor
-from shapes.trianglecell import TriangleCell
-from shapes.circlecell import CircleCell
-from shapes.rectcell import RectCell
-from shapes.pieslicecell import PieSliceCell
-from shapes.halfcirclecell import HalfCircleCell
+import imghdr
+import logging
+import math
+import random
 
 import numpy as np
 from numpy.random import randint
-
-from gencolor import GenColor
-from colorpalette import ColorPalette
-import util
-
 from PIL import Image, ImageFilter
 
-import random
-import imghdr
-import math
-import logging
+import util
+from colorpalette import ColorPalette
+from gencolor import GenColor
+from shapes.circlecell import CircleCell
+from shapes.comp import CompColor
+from shapes.halfcirclecell import HalfCircleCell
+from shapes.pieslicecell import PieSliceCell
+from shapes.rectcell import RectCell
+from shapes.trianglecell import TriangleCell
 
 # get root logger
 logger = logging.getLogger(

@@ -1,5 +1,5 @@
-from celery.utils.log import get_task_logger
 import boto3
+from celery.utils.log import get_task_logger
 
 # Create the celery app and get the logger
 logger = get_task_logger(__name__)

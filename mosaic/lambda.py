@@ -1,13 +1,13 @@
-import boto3
-import logging
+import imghdr
 import json
+import logging
 import os
 import tempfile
 import urllib.request
-import tempfile
-import os
-import imghdr
 from shutil import copyfile
+
+import boto3
+
 from mosaic import mosaic
 
 s3 = boto3.resource("s3")

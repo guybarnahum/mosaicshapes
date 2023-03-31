@@ -1,8 +1,9 @@
+from os import getenv
+
 from celery import Celery
 
 # from celery.utils.log import get_task_logger
 
-from os import getenv
 
 # Notice: redis and rabbit hosts are from docker-compose.yml not localhost!
 celery_app_broker = getenv("CELERY_BROKER_URL", "pyamqp://guest@rabbit//")

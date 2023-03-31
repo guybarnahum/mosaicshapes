@@ -1,16 +1,15 @@
-from PIL import Image
-
-from numpy import zeros, array, reshape, float64
+from numpy import array, float64, reshape, zeros
 from numpy.random import shuffle
+from PIL import Image
+# if use_sklearn_kmeans:
+#    from sklearn.cluster import KMeans
+# else:
+from scipy.cluster.vq import kmeans2 as kmeans
 
 # from sklearn.utils import shuffle
 
 # use_sklearn_kmeans = False
 
-# if use_sklearn_kmeans:
-#    from sklearn.cluster import KMeans
-# else:
-from scipy.cluster.vq import kmeans2 as kmeans
 
 # from scipy.cluster.vq import vq
 

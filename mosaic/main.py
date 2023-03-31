@@ -1,4 +1,7 @@
-import sys, os
+import argparse
+import logging
+import os
+import sys
 
 current = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(current)
@@ -6,11 +9,10 @@ sys.path.append(current)
 parent = os.path.dirname(current)
 sys.path.append(parent)  # <-- for worker.worker_utils
 
-from mosaic import mosaic
-import argparse
+# isort: split
 
-from worker.worker_util import download_url, str2b64, b642str, get_temp_file
-import logging
+from mosaic import mosaic
+from worker.worker_util import b642str, download_url, get_temp_file, str2b64
 
 logger = logging.getLogger(__name__)  # the __name__ resolve to "mosaic"
 # This will load the root logger

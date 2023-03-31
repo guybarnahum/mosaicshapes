@@ -1,7 +1,8 @@
 # import util
-import numpy as np
-from enum import Enum
 import abc
+from enum import Enum
+
+import numpy as np
 
 
 class Quadrant(Enum):

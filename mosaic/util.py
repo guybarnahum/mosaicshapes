@@ -1,20 +1,20 @@
+import base64
 import colorsys
+import functools
+import hashlib
+import imghdr
+import logging
 import math
 import operator
-import urllib.request
-from PIL import Image, ImageChops
-import functools
-from math import sqrt
-import numpy as np
-from itertools import chain
-import time
-import base64
-import tempfile
-import hashlib
 import os
-import imghdr
+import tempfile
+import time
+import urllib.request
+from itertools import chain
+from math import sqrt
 
-import logging
+import numpy as np
+from PIL import Image, ImageChops
 
 logger = logging.getLogger(__name__)  # the __name__ resolve to "util"
 # This will load the root logger

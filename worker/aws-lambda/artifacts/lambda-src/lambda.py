@@ -1,6 +1,7 @@
-import boto3
-import logging
 import json
+import logging
+
+import boto3
 
 if logging.getLogger().hasHandlers():
     # The Lambda environment pre-configures a handler logging to stderr.

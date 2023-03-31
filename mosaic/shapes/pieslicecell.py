@@ -1,6 +1,7 @@
 from PIL import Image, ImageDraw
-from shapes.cell import Cell, Quadrant
+
 import util
+from shapes.cell import Cell, Quadrant
 
 
 class PieSliceCell(Cell):
